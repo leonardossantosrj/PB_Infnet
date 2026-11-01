@@ -6,6 +6,8 @@ Em 2020, apenas **48,7%** da população brasileira tinha esgotamento sanitário
 
 O Marco Legal do Saneamento (Lei 14.026/2020) definiu como meta, até 2033, que **99%** da população tenha água potável e **90%** tenha coleta e tratamento de esgoto.
 
+Os dados para acompanhar esse avanço existem, mas estão espalhados em bases técnicas, muitas vezes em inglês, e são difíceis de interpretar para quem não é da área. Por isso, gestores públicos, ONGs e cidadãos têm dificuldade para acompanhar a evolução do saneamento e cobrar resultados.
+
 ## 2. Pilar ESG e ODS atendido
 
 - **Pilar ESG:** Ambiental (E), com impacto também no Social (S).
@@ -55,3 +57,38 @@ O Marco Legal do Saneamento (Lei 14.026/2020) definiu como meta, até 2033, que 
 | Professor da disciplina | Cliente e avaliador das entregas |
 | Público-alvo (gestores, ONGs, jornalistas, cidadãos) | Usuários finais do painel |
 | OMS/UNICEF JMP e Our World in Data | Fornecedores dos dados de água e saneamento |
+| Wikipedia e Google Notícias | Fontes do conteúdo extraído da web |
+
+## 8. Fontes de dados
+
+| Fonte | Uso no projeto |
+|---|---|
+| OMS/UNICEF JMP, via Our World in Data | Indicadores de acesso à água e ao esgoto por país e ano |
+| Wikipedia: artigo "Saneamento básico" | Nuvem de palavras e estatísticas do texto |
+| Google Notícias: busca "saneamento básico" | Tabela de notícias recentes |
+| CSV enviado pelo usuário | Dados complementares, como recortes urbano e rural ou dados municipais |
+
+O detalhamento de cada fonte está no [Data Summary Report](../2_data_acquisition_and_understanding/data_summary_report.md).
+
+## 9. Plano do projeto
+
+| Etapa | Fase do TDSP | Entregas | Status |
+|---|---|---|---|
+| TP1 | Business Understanding | Problema, ODS, metas, público-alvo, estrutura de pastas, primeiros artefatos e app demo | Concluída |
+| TP2 | Data Acquisition and Understanding e Deployment | Web scraping, interface interativa, cache, estado de sessão, upload e download, Git e documentação completa | Concluída |
+| Próxima etapa | Modeling | LLM com engenharia de prompts para gerar resumos dos indicadores e das notícias | A fazer |
+| Etapa final | Deployment e Customer Acceptance | Publicação no Streamlit Community Cloud, teste com usuários e Project Final Report | A fazer |
+
+## 10. Arquitetura
+
+```
+Wikipedia ──────┐
+Google Notícias ┴─> scripts de scraping (requests + Beautiful Soup) ─> data/raw (TXT e CSV) ─┐
+OMS/UNICEF (CSV do Our World in Data) ─────────────────────────────> data/raw (CSV) ─────────┤
+                                                                                             ├─> app.py (Streamlit, com cache) ─> usuário
+CSV enviado pelo usuário ─> upload no app ─> estado de sessão ───────────────────────────────┘
+```
+
+- **Coleta:** os scripts de scraping rodam separados do app e salvam os arquivos em `data/raw/`.
+- **Aplicação:** o `app.py` lê os arquivos com `st.cache_data`, para não reler a cada interação, e guarda os dados enviados pelo usuário em `st.session_state`.
+- **Versionamento e deploy:** o código fica no GitHub e será publicado no Streamlit Community Cloud.

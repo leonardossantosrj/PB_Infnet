@@ -20,13 +20,26 @@ O projeto segue as fases do ciclo de vida do **TDSP (Team Data Science Process)*
 painel-saneamento-ods6/
 ├── app.py                                  # aplicação Streamlit
 ├── requirements.txt                        # bibliotecas necessárias
+├── .gitignore                              # arquivos que o Git ignora (venv, __pycache__)
 ├── data/
-│   └── raw/                                # dados originais
+│   ├── raw/                                # dados originais e dados extraídos da web
+│   └── processed/                          # arquivo de exemplo para upload
 ├── 1_business_understanding/
 │   └── project_charter.md
 ├── 2_data_acquisition_and_understanding/
-│   └── data_summary_report.md
+│   ├── data_summary_report.md
+│   ├── scraping_wikipedia.py
+│   └── scraping_noticias.py
 ├── 3_modeling/
 ├── 4_deployment/
 └── 5_customer_acceptance/
+```
+
+## Coleta de dados da web
+
+Os scripts de web scraping rodam separados do app. Execute na raiz do projeto, antes de abrir o app:
+
+```
+python 2_data_acquisition_and_understanding/scraping_wikipedia.py
+python 2_data_acquisition_and_understanding/scraping_noticias.py
 ```
