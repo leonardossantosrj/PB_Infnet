@@ -30,12 +30,3 @@ painel-saneamento-ods6/
 ├── 4_deployment/
 └── 5_customer_acceptance/
 ```
-
-## Como rodar
-
-1. Crie o ambiente virtual: `python -m venv venv`
-2. Ative o ambiente:
-   - Windows: `venv\Scripts\activate`
-   - Mac/Linux: `source venv/bin/activate`
-3. Instale as bibliotecas: `pip install -r requirements.txt`
-4. Rode a aplicação: `streamlit run app.py`
