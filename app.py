@@ -26,7 +26,8 @@ STOPWORDS = {
     "foi", "ser", "tem", "têm", "pode", "podem", "sendo", "está", "estão", "muito",
     "outros", "outras", "cada", "desde", "até", "após", "ainda", "apenas", "forma",
     "sem", "por", "the", "and",
-}
+} #talvez aqui pudesse usar a própria biblioteca do skt-learn, como fiz junto com a IA queria entender como era o stopwords de outra
+#forma de implementação.
 
 
 # ---------- Funções de carga com cache: os arquivos são lidos só uma vez ----------
@@ -139,7 +140,7 @@ with aba_indicadores:
 
     st.subheader(indicador)
     grafico = filtrado.pivot(index="Ano", columns="País", values=indicador)
-    grafico.index = grafico.index.astype(str)  # evita o ano aparecer como "2,000" no eixo
+    grafico.index = grafico.index.astype(str) 
     st.line_chart(grafico)
 
     st.dataframe(filtrado, hide_index=True)
