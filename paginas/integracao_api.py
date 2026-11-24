@@ -2,8 +2,28 @@ import pandas as pd
 import requests
 import streamlit as st
 
-# Endereço da API FastAPI (rodar antes: uvicorn api:app --reload)
+from dados import carregar_noticias
+
+# Endereço da API FastAPI (rodar antes: python -m uvicorn api:app --reload)
 URL_API = "http://127.0.0.1:8000"
+
+
+def chamar_api(metodo, rota, **kwargs):
+    """Chama a API e mostra uma mensagem clara se ela estiver fora do ar ou responder com erro."""
+    try:
+        resposta = requests.request(metodo, f"{URL_API}{rota}", timeout=60, **kwargs)
+    except requests.exceptions.ConnectionError:
+        st.error("A API não está rodando. Abra outro terminal e rode: python -m uvicorn api:app --reload")
+        return None
+    except requests.exceptions.Timeout:
+        st.error("A API demorou mais de 60 segundos para responder. Tente de novo com um texto menor.")
+        return None
+
+    if resposta.status_code != 200:
+        st.error(f"Erro {resposta.status_code}: {resposta.json().get('detail')}")
+        return None
+    return resposta.json()
+
 
 st.title("Integração com a API")
 st.write(
@@ -11,11 +31,33 @@ st.write(
     f"fica em {URL_API}/docs."
 )
 
+# ---------- TP4: modelo de linguagem local ----------
+st.header("Análise de sentimento com modelo local (POST /processar_texto)")
+st.write(
+    "O texto é analisado pelo modelo cardiffnlp/twitter-xlm-roberta-base-sentiment, "
+    "que roda no próprio computador, sem serviços na nuvem."
+)
+
+noticias = carregar_noticias()
+titulo = st.selectbox("Escolha uma notícia coletada para preencher o texto", noticias["titulo"])
+texto = st.text_area("Texto para analisar (pode editar)", titulo)
+
+if st.button("Analisar sentimento"):
+    with st.spinner("Processando no modelo local..."):
+        analise = chamar_api("POST", "/processar_texto", json={"texto": texto})
+    if analise:
+        col1, col2 = st.columns(2)
+        col1.metric("Sentimento", analise["resultado"]["sentimento"])
+        col2.metric("Confiança", f"{analise['resultado']['confianca']:.0%}")
+        st.caption(f"Tipo de análise: {analise['tipo_analise']} · Modelo: {analise['modelo']}")
+
+# ---------- TP3: consulta e envio de indicadores ----------
 st.header("Consultar indicadores (GET /indicadores)")
 pais = st.text_input("País ou região (nome em inglês, ex.: Brazil, World)", "Brazil")
 
-resposta = requests.get(f"{URL_API}/indicadores", params={"pais": pais})
-st.dataframe(pd.DataFrame(resposta.json()), hide_index=True)
+indicadores = chamar_api("GET", "/indicadores", params={"pais": pais})
+if indicadores:
+    st.dataframe(pd.DataFrame(indicadores), hide_index=True)
 
 st.header("Enviar novo indicador (POST /indicadores)")
 with st.form("novo_indicador"):
@@ -36,5 +78,6 @@ if enviar:
         "esgoto_basico": esgoto_basico,
         "esgoto_seguro": esgoto_seguro,
     }
-    resposta = requests.post(f"{URL_API}/indicadores", json=novo_dado)
-    st.write(resposta.json())
+    salvo = chamar_api("POST", "/indicadores", json=novo_dado)
+    if salvo:
+        st.success(salvo["message"])
