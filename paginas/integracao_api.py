@@ -4,9 +4,7 @@ import streamlit as st
 
 from dados import carregar_noticias
 
-# Endereço da API FastAPI (rodar antes: python -m uvicorn api:app --reload)
 URL_API = "http://127.0.0.1:8000"
-
 
 def chamar_api(metodo, rota, **kwargs):
     """Chama a API e mostra uma mensagem clara se ela estiver fora do ar ou responder com erro."""
@@ -31,7 +29,7 @@ st.write(
     f"fica em {URL_API}/docs."
 )
 
-# ---------- TP4: modelo de linguagem local ----------
+# ---------- modelo de linguagem local ----------
 st.header("Análise de sentimento com modelo local (POST /processar_texto)")
 st.write(
     "O texto é analisado pelo modelo cardiffnlp/twitter-xlm-roberta-base-sentiment, "
@@ -51,7 +49,7 @@ if st.button("Analisar sentimento"):
         col2.metric("Confiança", f"{analise['resultado']['confianca']:.0%}")
         st.caption(f"Tipo de análise: {analise['tipo_analise']} · Modelo: {analise['modelo']}")
 
-# ---------- TP3: consulta e envio de indicadores ----------
+# ---------- consulta e envio de indicadores ----------
 st.header("Consultar indicadores (GET /indicadores)")
 pais = st.text_input("País ou região (nome em inglês, ex.: Brazil, World)", "Brazil")
 
