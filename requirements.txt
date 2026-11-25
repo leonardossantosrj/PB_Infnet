@@ -11,3 +11,4 @@ transformers==4.57.6
 torch==2.15.0
 sentencepiece==0.2.3
 protobuf==7.36.2
+ollama==0.6.3
