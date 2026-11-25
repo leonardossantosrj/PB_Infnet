@@ -23,6 +23,8 @@ st.markdown(
 - Exibir notícias e conteúdos da web sobre saneamento no Brasil.
 - Disponibilizar os dados por uma API, para que outros sistemas possam consultá-los e enviar novos dados.
 - Usar IA generativa (LLM) para explicar os indicadores em linguagem simples.
+- Classificar o sentimento das notícias com um modelo de IA que roda no próprio computador.
+- Responder perguntas sobre os dados em linguagem simples com um assistente de IA local que lembra a conversa.
 """
 )
 
