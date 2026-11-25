@@ -45,6 +45,10 @@ def carregar_texto():
 def carregar_noticias():
     return pd.read_csv("data/raw/noticias_saneamento.csv")
 
+@st.cache_data
+def carregar_sentimentos():
+    # Gerado pelo script 3_modeling/classificar_noticias.py (TP5)
+    return pd.read_csv("data/processed/noticias_sentimento.csv")
 
 @st.cache_data
 def contar_palavras(texto):
