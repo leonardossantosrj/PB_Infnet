@@ -10,9 +10,9 @@ O projeto segue as fases do ciclo de vida do **TDSP (Team Data Science Process)*
 |---|---|---|---|---|
 | 1. Business Understanding | Business Understanding | Definir o problema, o ODS, as metas e o público-alvo | `1_business_understanding/` | Project Charter |
 | 2. Data Acquisition and Understanding | Data Understanding e Data Preparation | Coletar os dados (download, web scraping e APIs), entender e preparar | `2_data_acquisition_and_understanding/` e `data/` | Data Summary Report |
-| 3. Modeling | Modeling e Evaluation | Escolher um modelo de linguagem local e usá-lo na API para classificar o sentimento das notícias (Model Report em `3_modeling/README.md`) | `3_modeling/` | Model Report |
-| 4. Deployment | Deployment | Publicar o painel em Streamlit e a API em FastAPI | `4_deployment/`, `app.py`, `paginas/` e `api.py` | Dashboard e API |
-| 5. Customer Acceptance | Evaluation (do ponto de vista do negócio) | Validar o painel com usuários e fechar o projeto | `5_customer_acceptance/` | Project Final Report |
+| 3. Modeling | Modeling e Evaluation | Classificar o sentimento das notícias com um modelo local (TP4) e criar um assistente com LLM local e memória conversacional (TP5) | `3_modeling/` e `assistente.py` | Model Report |
+| 4. Deployment | Deployment | Rodar o painel em Streamlit, a API em FastAPI e os modelos de IA no computador | `4_deployment/`, `app.py`, `paginas/` e `api.py` | Dashboard, API e guia de deployment |
+| 5. Customer Acceptance | Evaluation (do ponto de vista do negócio) | Testar a solução com casos reais, apresentar os resultados e fechar o projeto | `5_customer_acceptance/` | Project Final Report |
 
 ## Estrutura de diretórios
 
@@ -22,16 +22,18 @@ painel-saneamento-ods6/
 ├── paginas/                                # uma página do app por arquivo
 │   ├── sobre.py
 │   ├── indicadores.py
+│   ├── insights_ia.py                      # gráficos de sentimento e assistente com memória
 │   ├── conteudo_web.py
 │   ├── enviar_dados.py
 │   └── integracao_api.py
 ├── dados.py                                # funções de leitura usadas por todas as páginas
+├── assistente.py                           # LLM local (Ollama): prompt com os dados e memória
 ├── api.py                                  # API FastAPI
 ├── requirements.txt                        # bibliotecas necessárias
 ├── .gitignore                              # arquivos que o Git ignora (venv, __pycache__)
 ├── data/
 │   ├── raw/                                # dados originais e dados extraídos da web
-│   └── processed/                          # arquivo de exemplo para upload e dados enviados pela API
+│   └── processed/                          # exemplo para upload, dados enviados pela API e notícias com sentimento
 ├── 1_business_understanding/
 │   └── project_charter.md
 ├── 2_data_acquisition_and_understanding/
@@ -39,9 +41,12 @@ painel-saneamento-ods6/
 │   ├── scraping_wikipedia.py
 │   └── scraping_noticias.py
 ├── 3_modeling/
-│   └── README.md                           
+│   ├── README.md                           # Model Report: modelos de IA, prompt e memória
+│   └── classificar_noticias.py             # classifica o sentimento de todas as notícias
 ├── 4_deployment/
+│   └── README.md                           # guia de deployment
 └── 5_customer_acceptance/
+    └── README.md                           # Project Final Report
 ```
 
 ## Coleta de dados da web
@@ -59,13 +64,14 @@ python 2_data_acquisition_and_understanding/scraping_noticias.py
 |---|---|
 | Sobre o projeto | Problema de negócio, objetivos, links e amostra dos dados |
 | Indicadores | Filtros de país, indicador e período, gráfico, tabela e download em CSV |
+| Insights com IA | Ciclo de ciência de dados do projeto, gráficos do sentimento das notícias por tema e assistente que responde perguntas sobre os dados e lembra a conversa |
 | Conteúdo da web | Nuvem de palavras da Wikipedia, palavras mais frequentes e notícias com filtro por tema |
 | Enviar dados | Upload de CSV com dados complementares, que aparecem na página Indicadores |
 | API | Análise de sentimento de notícias com o modelo local e consulta e envio de indicadores usando a API FastAPI |
 
 ## Como rodar o app e a API
 
-A página API do app depende da API rodando. Use dois terminais, ambos na raiz do projeto e com a venv ativa.
+A página API do app depende da API rodando, e o assistente da página Insights com IA depende do Ollama. Use dois terminais, ambos na raiz do projeto e com a venv ativa. O passo a passo completo está no [guia de deployment](4_deployment/README.md).
 
 1. Instale as bibliotecas (só na primeira vez):
    ```
@@ -76,10 +82,27 @@ A página API do app depende da API rodando. Use dois terminais, ambos na raiz d
    python -m uvicorn api:app --reload
    ```
    Na primeira vez, a API baixa o modelo de linguagem da HuggingFace (cerca de 1,1 GB), então precisa de internet e pode levar alguns minutos. Depois, o modelo fica salvo no computador e a API sobe sem internet.
-3. No terminal 2, suba o app:
+3. Instale o Ollama (https://ollama.com/download) e baixe o modelo do assistente (só na primeira vez, cerca de 2,5 GB):
+   ```
+   ollama pull qwen3:4b
+   ```
+4. Com a API ligada, classifique o sentimento das notícias (repita sempre que coletar notícias novas):
+   ```
+   python 3_modeling/classificar_noticias.py
+   ```
+5. No terminal 2, suba o app:
    ```
    python -m streamlit run app.py
    ```
+
+## Inteligência artificial no projeto
+
+| Modelo | Onde roda | O que faz no painel |
+|---|---|---|
+| `cardiffnlp/twitter-xlm-roberta-base-sentiment` (Transformers) | Na API, rota `POST /processar_texto` | Classifica o sentimento das notícias. O resultado aparece nos gráficos da página Insights com IA |
+| `qwen3:4b` (Ollama) | No app, pelo `assistente.py` | Responde perguntas sobre os indicadores, as notícias e o texto da Wikipedia em linguagem simples e lembra as últimas mensagens da conversa |
+
+A escolha dos modelos, o prompt e o funcionamento da memória estão no [Model Report](3_modeling/README.md). Os testes e os resultados estão no [Project Final Report](5_customer_acceptance/README.md).
 
 ## API
 
