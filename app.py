@@ -11,6 +11,7 @@ if "dados_usuario" not in st.session_state:
 menu = st.navigation(
     [
         st.Page("paginas/sobre.py", title="Sobre o projeto", default=True),
+        st.Page("paginas/insights_ia.py", title="Insights com IA"),
         st.Page("paginas/indicadores.py", title="Indicadores"),
         st.Page("paginas/conteudo_web.py", title="Conteúdo da web"),
         st.Page("paginas/enviar_dados.py", title="Enviar dados"),
