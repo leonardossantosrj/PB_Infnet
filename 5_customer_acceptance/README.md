@@ -43,9 +43,9 @@ Coleta de 24/11/2026: 229 notícias das buscas "água potável", "tratamento de 
 
 | Sentimento | Percentual das notícias |
 |---|---|
-| Positivo | **[preencher após rodar o script de classificação]** |
-| Neutro | **[preencher]** |
-| Negativo | **[preencher]** |
+| Positivo | **17.5** |
+| Neutro | **65.5** |
+| Negativo | **17.0** |
 
 - **Tema com a maior proporção de notícias negativas:** **[preencher com o insight da página Insights com IA]**
 
@@ -63,14 +63,14 @@ Testes feitos na página Insights com IA, em uma única conversa, na ordem abaix
 
 | # | Pergunta | O que valida | Resposta esperada | Resultado observado |
 |---|---|---|---|---|
-| 1 | Como está o esgoto tratado no Brasil? | Uso dos dados do prompt | 48,71% em 2020, citando a OMS/UNICEF | **[preencher]** |
-| 2 | E comparado ao mundo? | Memória: entende que o assunto continua sendo esgoto | Mundo com 53,95% em 2020; Brasil abaixo | **[preencher]** |
-| 3 | E com a América Latina? | Memória | América Latina com 34,07%; Brasil acima | **[preencher]** |
-| 4 | O Brasil vai cumprir a meta de esgoto de 2033? | Metas no prompt | Meta de 90%, distância grande para o valor de 2020, sem inventar previsões | **[preencher]** |
-| 5 | Qual o percentual de esgoto tratado na Argentina? | Regra de não inventar | Diz que o painel não tem esse dado | **[preencher]** |
-| 6 | O que as notícias dizem sobre tratamento de esgoto? | Uso do sentimento das notícias | Resume o sentimento do tema e cita exemplos | **[preencher]** |
-| 7 | Resuma o que é saneamento em 3 frases. | Uso do texto da Wikipedia | Resumo com base no trecho da Wikipedia | **[preencher]** |
-| 8 | (com o Ollama fechado) Como está a água no Brasil? | Tratamento de erros | Mensagem "O Ollama não está rodando..." | **[preencher]** |
+| 1 | Como está o esgoto tratado no Brasil? | Uso dos dados do prompt | 48,71% em 2020, citando a OMS/UNICEF | **No Brasil, segundo os dados da OMS/UNICEF de 2020, 48,71% da população tinha acesso a esgoto seguro (tratado e descartado com segurança). Isso significa que cerca de 49% dos brasileiros contavam com sistemas que tratam os dejetos de forma segura, evitando riscos à saúde.** |
+| 2 | E comparado ao mundo? | Memória: entende que o assunto continua sendo esgoto | Mundo com 53,95% em 2020; Brasil abaixo | **Comparado com a América Latina e Caribe (34,07% em 2020), o Brasil está melhorando, mas ainda está atrás do mundo (53,95% em 2020).** |
+| 3 | E com a América Latina? | Memória | América Latina com 34,07%; Brasil acima | **Comparado com a América Latina e Caribe (34,07% em 2020), o Brasil está melhorando, mas ainda está atrás do mundo (53,95% em 2020).** |
+| 4 | O Brasil vai cumprir a meta de esgoto de 2033? | Metas no prompt | Meta de 90%, distância grande para o valor de 2020, sem inventar previsões | **O Marco Legal do Saneamento (Lei 14.026/2020) prevê chegar a 90% da população com coleta e tratamento de esgoto até 2033, o que é um desafio importante para o Brasil.** |
+| 5 | Qual o percentual de esgoto tratado na Argentina? | Regra de não inventar | Diz que o painel não tem esse dado | **O painel não tem dados específicos para a Argentina. Os indicadores da OMS/UNICEF mostram que, para a América Latina e Caribe (que inclui a Argentina), em 2020, 34,07% da população tinha acesso a esgoto seguro (tratado e descartado com segurança). Porém, não há informações detalhadas por país no painel.** |
+| 6 | O que as notícias dizem sobre tratamento de esgoto? | Uso do sentimento das notícias | Resume o sentimento do tema e cita exemplos | **As notícias recentes sobre tratamento de esgoto mostram uma mistura de desafios e avanços. Segundo o painel, 13 notícias têm sentimento negativo (como problemas de infraestrutura e secas), 55 são neutras (projetos de novas estações de tratamento) e 17 positivas (como iniciativas que garantem acesso à água tratada).Exemplos comuns incluem projetos em regiões do Nordeste (como Pelotas) e soluções tecnológicas, mas também relatos de dificuldades em áreas rurais e de acesso a serviços básicos. O foco principal é a necessidade de ampliar a cobertura e resolver problemas de infraestrutura.** |
+| 7 | Resuma o que é saneamento em 3 frases. | Uso do texto da Wikipedia | Resumo com base no trecho da Wikipedia | **Saneamento é um conjunto de serviços que garante acesso à água potável e tratamento seguro de esgoto, desde a coleta até o descarte final. Ele inclui práticas como higiene pessoal, gestão de resíduos e sistemas de tratamento que evitam doenças.É um direito humano reconhecido pela ONU e parte das metas do ODS 6 para 2030, visando garantir saúde e bem-estar para todos.** |
+| 8 | (com o Ollama fechado) Como está a água no Brasil? | Tratamento de erros | Mensagem "O Ollama não está rodando..." | **O Ollama não está rodando. Abra o aplicativo do Ollama e tente de novo.** |
 
 ## 6. Como a solução resolve o problema de negócio
 
@@ -91,8 +91,8 @@ Para o ESG e o ODS 6, isso significa transparência: quem cobra a universalizaç
 | Manter o conteúdo atualizado | Atingida: coleta de notícias de 24/11/2026, com os scripts prontos para novas coletas |
 | Permitir integração com outros sistemas | Atingida: 3 rotas documentadas em `/docs` |
 | Analisar o sentimento das notícias localmente | Atingida: rota `POST /processar_texto` com o modelo local |
-| Classificar todas as notícias coletadas | **[confirmar após rodar o script]** |
-| Responder perguntas com base nos dados e lembrar a conversa | **[confirmar com os testes da seção 5]** |
+| Classificar todas as notícias coletadas |
+| Responder perguntas com base nos dados e lembrar a conversa | 
 | Ser fácil de entender (teste com 5 usuários) | Não realizada nesta entrega. Roteiro na seção 8 |
 
 ## 8. Roteiro do teste com usuários
